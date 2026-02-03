@@ -215,6 +215,7 @@ export default function App() {
     () => (reviewData ? [] : splitReviewIntoSections(review)),
     [review, reviewData],
   );
+  const severityClass = `severity-pill severity-${(reviewData?.severity || "low").toLowerCase()}`;
 
   return (
     <div className="page">
@@ -309,7 +310,12 @@ export default function App() {
 
             <label className="code-label">
               Code
-              <div className="editor-shell" onKeyDown={handleKeyDown}>
+              <div
+                className="editor-shell"
+                onKeyDown={handleKeyDown}
+                onDrop={handleDrop}
+                onDragOver={handleDragOver}
+              >
                 <Editor
                   value={code}
                   onValueChange={setCode}
@@ -321,6 +327,10 @@ export default function App() {
                   preClassName="code-pre"
                   placeholder="Paste code here..."
                 />
+              </div>
+              <div className="upload-row">
+                <input type="file" onChange={handleFileUpload} />
+                <span className="upload-hint">Drag a file here or choose one.</span>
               </div>
             </label>
 
@@ -356,6 +366,14 @@ export default function App() {
                 disabled={!review}
               >
                 {copied ? "Copied" : "Copy"}
+              </button>
+              <button
+                type="button"
+                className="ghost small"
+                onClick={handleDownload}
+                disabled={!review}
+              >
+                Download JSON
               </button>
             </div>
           </div>
